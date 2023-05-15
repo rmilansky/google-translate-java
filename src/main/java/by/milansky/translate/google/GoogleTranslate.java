@@ -12,6 +12,7 @@ import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * @author milansky
@@ -38,9 +39,10 @@ public final class GoogleTranslate {
                             .getAsJsonArray()
                             .get(0)
                             .getAsJsonArray()
-                            .get(0)
-                            .getAsJsonArray()
-                            .get(0).getAsString();
+                            .asList()
+                            .stream()
+                            .map(jsonElement -> jsonElement.getAsJsonArray().get(0).getAsString())
+                            .collect(Collectors.joining(""));
 
                     return new GoogleTranslateResponse(googleRequest.text(), translate);
                 });

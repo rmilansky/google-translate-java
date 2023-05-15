@@ -16,13 +16,13 @@ class GoogleTranslateTest {
     void translateTest() {
         val request = GoogleTranslateRequest
                 .builder()
-                .text("Hello, it's test!")
+                .text("Hello, it's test! How are you?")
                 .to(GoogleTranslateLanguage.RUSSIAN)
                 .build();
 
         val text = translate.translate(request).join().translate();
 
-        assertEquals(text, "Привет, это тест!");
+        assertEquals(text, "Привет, это тест! Как вы?");
     }
 
 }
