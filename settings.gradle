@@ -20,6 +20,6 @@ dependencyResolutionManagement {
         }
     }
 }
+
 include 'api'
 include 'google'
-
