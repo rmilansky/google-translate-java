@@ -45,7 +45,7 @@ Maven:
 ```xml
 
 <properties>
-    <protocol.version>2.0.2</protocol.version>
+    <protocol.version>2.0.1</protocol.version>
 </properties>
 
 <dependencies>
