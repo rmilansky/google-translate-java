@@ -1,2 +1,20 @@
 rootProject.name = 'google-translate'
 
+dependencyResolutionManagement {
+    versionCatalogs {
+        libs {
+            version("lombok", "1.18.36")
+            version("annotations", "23.0.0")
+            version("junit", "5.8.2")
+            version("jackson", "2.18.2")
+
+            library("lombok", "org.projectlombok", "lombok").versionRef("lombok")
+
+            library("jackson-databind", "com.fasterxml.jackson.core", "jackson-databind").versionRef("jackson")
+            library("jetbrains-annotations", "org.jetbrains", "annotations").versionRef("annotations")
+
+            library("junit-engine", "org.junit.jupiter", "junit-jupiter-engine").versionRef("junit")
+            library("junit-api", "org.junit.jupiter", "junit-jupiter-api").versionRef("junit")
+        }
+    }
+}

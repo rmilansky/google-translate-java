@@ -4,52 +4,55 @@ plugins {
 }
 
 group = 'by.milansky'
-version = '1.1-SNAPSHOT'
+version = '2.0.1'
 
 repositories {
+    mavenLocal()
     mavenCentral()
 }
 
 dependencies {
-    testImplementation platform('org.junit:junit-bom:5.9.1')
-    testImplementation 'org.junit.jupiter:junit-jupiter'
+    implementation libs.jackson.databind
 
-    implementation 'com.google.code.gson:gson:+'
+    compileOnly libs.lombok
+    annotationProcessor libs.lombok
 
-    compileOnly 'org.projectlombok:lombok:1.18.26'
-    annotationProcessor 'org.projectlombok:lombok:1.18.26'
+    testCompileOnly libs.lombok
+    testAnnotationProcessor libs.lombok
 
-    testCompileOnly 'org.projectlombok:lombok:1.18.26'
-    testAnnotationProcessor 'org.projectlombok:lombok:1.18.26'
+    testImplementation libs.junit.api
+    testImplementation libs.junit.engine
 }
 
 compileJava.options.encoding = 'UTF-8'
 
 publishing {
-    publications {
-        maven(MavenPublication) {
-            groupId = group
-            artifactId = project.name
-            version = version
-
-            from components.java
-        }
-    }
-
     repositories {
         maven {
-            name = "GITHUB"
-            url = "https://maven.pkg.github.com/rmilansky/google-translate-java"
+            name = "milansky-repo"
+            url = uri("https://maven.milansky.ovh/releases")
+
             credentials {
-                username = System.getenv("USERNAME")
-                password = System.getenv("TOKEN")
+                username = System.getenv("MILANSKY_REPO_USER")
+                password = System.getenv("MILANSKY_REPO_TOKEN")
             }
         }
     }
-}
 
-tasks.withType(JavaCompile) {
-    options.encoding = 'UTF-8'
+    publications {
+        gpr(MavenPublication) {
+            from(components.java)
+
+            pom {
+                licenses {
+                    license {
+                        name = 'MIT License'
+                        url = 'https://github.com/rmilansky/minecraft-protocol-java/blob/master/LICENSE'
+                    }
+                }
+            }
+        }
+    }
 }
 
 test {

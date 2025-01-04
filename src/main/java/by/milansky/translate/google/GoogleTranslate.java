@@ -1,6 +1,6 @@
 package by.milansky.translate.google;
 
-import com.google.gson.JsonParser;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.NonNull;
 import lombok.val;
 
@@ -12,13 +12,12 @@ import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
 /**
  * @author milansky
  */
 public final class GoogleTranslate {
-
+    private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
     private static final Function<GoogleTranslateRequest, String> URL_FORMAT = request ->
             "https://translate.googleapis.com/translate_a/single?client=gtx&sl=" +
                     request.from().getCode() + "&tl=" + request.to().getCode() + "&dt=t&q=" +
@@ -33,19 +32,20 @@ public final class GoogleTranslate {
                 .uri(URI.create(URL_FORMAT.apply(googleRequest)))
                 .build();
 
-        return client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
-                .thenApply(response -> {
-                    val translate = JsonParser.parseString(response.body())
-                            .getAsJsonArray()
-                            .get(0)
-                            .getAsJsonArray()
-                            .asList()
-                            .stream()
-                            .map(jsonElement -> jsonElement.getAsJsonArray().get(0).getAsString())
-                            .collect(Collectors.joining(""));
+        return client.sendAsync(request, HttpResponse.BodyHandlers.ofString()).thenApply(response -> {
+            try {
+                val rootNode = OBJECT_MAPPER.readTree(response.body());
+                val translationArray = rootNode.get(0);
+                val translatedText = new StringBuilder();
 
-                    return new GoogleTranslateResponse(googleRequest.text(), translate);
-                });
+                for (val node : translationArray) {
+                    translatedText.append(node.get(0).asText());
+                }
+
+                return new GoogleTranslateResponse(googleRequest.text(), translatedText.toString());
+            } catch (Exception e) {
+                throw new RuntimeException("Failed to parse translation response", e);
+            }
+        });
     }
-
 }
