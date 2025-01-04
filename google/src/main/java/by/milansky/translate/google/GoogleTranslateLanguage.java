@@ -1,18 +1,20 @@
 package by.milansky.translate.google;
 
+import by.milansky.translate.api.TranslateLanguage;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.experimental.Accessors;
 import lombok.experimental.FieldDefaults;
 
 /**
  * @author milansky
  */
 @Getter
-@RequiredArgsConstructor
+@Accessors(fluent = true)
+@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-public enum GoogleTranslateLanguage {
-
+public enum GoogleTranslateLanguage implements TranslateLanguage {
     AUTO("auto"),
     ENGLISH("en"),
     RUSSIAN("ru"),
@@ -22,6 +24,5 @@ public enum GoogleTranslateLanguage {
     POLISH("pl"),
     BELARUSIAN("be");
 
-    String code;
-
+    String identifier;
 }

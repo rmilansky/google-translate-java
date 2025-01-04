@@ -1,60 +1,63 @@
-plugins {
-    id 'java'
-    id 'maven-publish'
+allprojects {
+    group = 'by.milansky.translate'
+    version = '2.0.1'
 }
 
-group = 'by.milansky'
-version = '2.0.1'
+subprojects {
+    apply plugin: 'java'
+    apply plugin: 'maven-publish'
 
-repositories {
-    mavenLocal()
-    mavenCentral()
-}
-
-dependencies {
-    implementation libs.jackson.databind
-
-    compileOnly libs.lombok
-    annotationProcessor libs.lombok
-
-    testCompileOnly libs.lombok
-    testAnnotationProcessor libs.lombok
-
-    testImplementation libs.junit.api
-    testImplementation libs.junit.engine
-}
-
-compileJava.options.encoding = 'UTF-8'
-
-publishing {
     repositories {
-        maven {
-            name = "milansky-repo"
-            url = uri("https://maven.milansky.ovh/releases")
-
-            credentials {
-                username = System.getenv("MILANSKY_REPO_USER")
-                password = System.getenv("MILANSKY_REPO_TOKEN")
-            }
-        }
+        mavenLocal()
+        mavenCentral()
     }
 
-    publications {
-        gpr(MavenPublication) {
-            from(components.java)
+    dependencies {
+        compileOnly libs.lombok
+        annotationProcessor libs.lombok
 
-            pom {
-                licenses {
-                    license {
-                        name = 'MIT License'
-                        url = 'https://github.com/rmilansky/minecraft-protocol-java/blob/master/LICENSE'
+        compileOnly libs.immutables
+        annotationProcessor libs.immutables
+
+        compileOnly libs.jetbrains.annotations
+
+        testCompileOnly libs.lombok
+        testAnnotationProcessor libs.lombok
+
+        testImplementation libs.junit.api
+        testImplementation libs.junit.engine
+    }
+
+    publishing {
+        repositories {
+            maven {
+                name = "milansky-repo"
+                url = uri("https://maven.milansky.ovh/releases")
+
+                credentials {
+                    username = System.getenv("MILANSKY_REPO_USER")
+                    password = System.getenv("MILANSKY_REPO_TOKEN")
+                }
+            }
+        }
+
+        publications {
+            gpr(MavenPublication) {
+                from(components.java)
+
+                pom {
+                    licenses {
+                        license {
+                            name = 'MIT License'
+                            url = 'https://github.com/rmilansky/google-translate-java/blob/master/LICENSE'
+                        }
                     }
                 }
             }
         }
     }
-}
 
-test {
-    useJUnitPlatform()
+    test {
+        useJUnitPlatform()
+    }
 }
