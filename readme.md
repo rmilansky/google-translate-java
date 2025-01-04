@@ -1,4 +1,6 @@
 <div align="center">
+  <img src=".assets/illustration.png" width="500"/>
+  <br>
   <img src="https://img.shields.io/badge/language-java-gold?style=flat" />
   <img src="https://img.shields.io/badge/v2.0.1-gold?style=flat" />
   <img src="https://img.shields.io/github/stars/rmilansky/translate-java?style=flat" />
